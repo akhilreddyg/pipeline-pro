@@ -1,2 +1,2 @@
-FROM tomacat:8.0
+FROM ubuntu
 COPY ./target/myweb.jar /usr/local/tomcat/webapps
