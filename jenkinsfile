@@ -1,0 +1,34 @@
+pipeline
+{
+    agent any
+    stages{
+        stage('checkout SCM')
+        {
+            steps
+            {
+            git credentialsId: 'forgithubcred', url: 'https://github.com/akhilreddyg/pipeline-pro.git'
+            }
+        }
+        stage ('Build  file from maven')
+        {
+            steps
+            {
+            sh 'mvn install'
+        }
+    }
+    stage('create artifacts of docker image')
+    {
+        steps
+        {
+            sh 'docker build -t akhilreddyg:mypro1.0 -f Dockerfile .'
+        }
+    }
+    stage('create tomcat container using new image')
+    {
+        steps
+        {
+          sh 'docker run -dti --name prod-env -p 8085:8080 akhilreddyg:mypro1.0' 
+        }
+    }
+    }
+}
